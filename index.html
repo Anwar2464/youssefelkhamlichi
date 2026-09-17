@@ -1,0 +1,2409 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Youssef Elkhamlichi — Automaticien &amp; électrotechnicien</title>
+    <meta
+      name="description"
+      content="Portfolio de Youssef Elkhamlichi, automaticien et électrotechnicien à Tanger : automatisation industrielle, TIA Portal, HMI, vision Keyence, PROFINET."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* =========================================================
+   TOKENS — palette « armoire de commande » :
+   gris machine RAL 7035, graphite, ambre de signalisation
+========================================================= */
+      :root {
+        --panel: #e9e7e1;
+        --panel-2: #dedbd3;
+        --panel-3: #d2cec5;
+        --graphite: #1b2024;
+        --graphite-2: #242a30;
+        --ink: #20262b;
+        --ink-soft: #5c666e;
+        --line: #c3bfb5;
+        --line-dark: rgba(255, 255, 255, 0.14);
+        --amber: #d8850c;
+        --run: #4f9a5f;
+        --wire: #2c6d8e;
+        --sans: "IBM Plex Sans", system-ui, sans-serif;
+        --cond:
+          "IBM Plex Sans Condensed", "IBM Plex Sans", system-ui, sans-serif;
+        --mono: "IBM Plex Mono", ui-monospace, monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--sans);
+        background: var(--panel);
+        color: var(--ink);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      img,
+      svg {
+        max-width: 100%;
+      }
+      :focus-visible {
+        outline: 2px solid var(--amber);
+        outline-offset: 3px;
+      }
+
+      /* grain premium très léger sur tout le site */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 200;
+        opacity: 0.035;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      }
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        width: 0%;
+        background: var(--amber);
+        z-index: 210;
+        box-shadow: 0 0 8px var(--amber);
+        transition: width 0.08s linear;
+      }
+
+      .wrap {
+        width: min(1150px, 90%);
+        margin: 0 auto;
+      }
+      .section {
+        padding: 110px 0;
+        position: relative;
+      }
+      .section + .section {
+        border-top: 1px solid var(--line);
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: var(--cond);
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: -0.015em;
+      }
+      h2 {
+        font-size: clamp(34px, 4.4vw, 58px);
+        max-width: 16ch;
+      }
+      h3 {
+        font-size: 22px;
+        letter-spacing: -0.01em;
+      }
+      p {
+        max-width: 68ch;
+      }
+
+      .kicker {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        color: var(--ink-soft);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      .kicker::before {
+        content: "";
+        width: 22px;
+        height: 2px;
+        background: var(--amber);
+      }
+      .lead {
+        font-size: 17px;
+        color: #3a4248;
+        margin-top: 20px;
+      }
+
+      /* =========================================================
+   BARRE HAUTE
+========================================================= */
+      .topbar {
+        position: fixed;
+        inset: 0 0 auto 0;
+        height: 62px;
+        z-index: 60;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 max(5vw, 20px);
+        background: rgba(27, 32, 36, 0.94);
+        backdrop-filter: blur(10px);
+        color: #f1efe9;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--cond);
+        font-size: 16px;
+      }
+      .plate {
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--amber);
+        color: var(--amber);
+        font-family: var(--mono);
+        font-size: 11px;
+        border-radius: 3px;
+      }
+      .topbar nav {
+        display: flex;
+        gap: 26px;
+        font-size: 13px;
+        color: #b9c0c6;
+      }
+      .topbar nav a {
+        padding: 6px 0;
+        border-bottom: 1px solid transparent;
+        transition: 0.2s;
+      }
+      .topbar nav a:hover {
+        color: #fff;
+        border-bottom-color: var(--amber);
+      }
+      .burger {
+        display: none;
+        background: none;
+        border: 0;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      /* =========================================================
+   HERO — la station de chargement en 3D
+========================================================= */
+      .hero {
+        background: var(--graphite);
+        color: #eceae4;
+        padding: 130px 0 70px;
+        position: relative;
+        overflow: hidden;
+        --mx: 50%;
+        --my: 30%;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        background: radial-gradient(
+          560px circle at var(--mx) var(--my),
+          rgba(216, 133, 12, 0.14),
+          transparent 60%
+        );
+        transition: background 0.05s linear;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 6px;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--amber) 0 22px,
+          #1b2024 22px 44px
+        );
+        opacity: 0.75;
+        z-index: 1;
+      }
+      .hero-grid {
+        position: relative;
+        z-index: 2;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        gap: 56px;
+        align-items: center;
+      }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: #c9d1d6;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 3px;
+        padding: 6px 11px;
+      }
+      .led {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--run);
+        box-shadow: 0 0 10px var(--run);
+      }
+      .hero h1 {
+        font-size: clamp(50px, 7.4vw, 96px);
+        margin: 22px 0 6px;
+        letter-spacing: -0.035em;
+      }
+      .hero h1 em {
+        display: block;
+        font-style: normal;
+        color: #9aa4ac;
+      }
+      .role {
+        font-family: var(--mono);
+        font-size: 15px;
+        color: var(--amber);
+        margin-bottom: 20px;
+      }
+      .hero p {
+        color: #b7bfc5;
+        font-size: 16px;
+        max-width: 52ch;
+      }
+      .cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+      .btn {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 13px 20px;
+        border-radius: 3px;
+        border: 1px solid transparent;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+      .btn-main {
+        background: var(--amber);
+        color: #17191b;
+      }
+      .btn-main:hover {
+        background: #efa02a;
+        box-shadow:
+          0 0 0 1px rgba(216, 133, 12, 0.4),
+          0 10px 26px -8px rgba(216, 133, 12, 0.55);
+        transform: translateY(-1px);
+      }
+      .btn-ghost {
+        border-color: rgba(255, 255, 255, 0.25);
+        color: #e6e3dd;
+      }
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(216, 133, 12, 0.5);
+        transform: translateY(-1px);
+      }
+      .btn {
+        transition:
+          0.2s,
+          transform 0.2s ease;
+      }
+
+      .readout {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 38px;
+        font-family: var(--mono);
+        font-size: 11.5px;
+        color: #aab2b9;
+      }
+      .readout span {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        padding: 5px 9px;
+        border-radius: 2px;
+      }
+
+      .stage {
+        position: relative;
+        height: 430px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 4px;
+        background: #171b1f;
+      }
+      .stage canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .stage-tag {
+        position: absolute;
+        left: 12px;
+        bottom: 10px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: #79838b;
+      }
+      .stage-hud {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: #c9d1d6;
+        text-align: right;
+      }
+      .stage-hud .hud-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(23, 27, 31, 0.6);
+        padding: 4px 8px;
+        border-radius: 2px;
+      }
+      .stage-hud .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--run);
+      }
+      .stage-hud .dot.warn {
+        background: var(--amber);
+      }
+      .stage-fallback {
+        position: absolute;
+        inset: 0;
+        display: none;
+        place-items: center;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: #79838b;
+        text-align: center;
+        padding: 20px;
+      }
+
+      /* =========================================================
+   PROFIL
+========================================================= */
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: start;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 26px;
+      }
+      .chip {
+        font-family: var(--mono);
+        font-size: 12px;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--amber);
+        padding: 7px 12px;
+        border-radius: 2px;
+      }
+      .facts {
+        border-top: 1px solid var(--line);
+        margin-top: 8px;
+      }
+      .fact {
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        gap: 16px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .fact dt {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--ink-soft);
+      }
+
+      /* =========================================================
+   CYCLE MACHINE (expérience)
+========================================================= */
+      .job-head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 16px;
+        margin: 46px 0 0;
+        padding-bottom: 16px;
+        border-bottom: 2px solid var(--ink);
+      }
+      .job-head p {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--ink-soft);
+      }
+      .cycle {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        margin-top: 34px;
+      }
+      .step {
+        padding: 26px 22px 26px 0;
+        border-top: 3px solid var(--line);
+        position: relative;
+      }
+      .step + .step {
+        padding-left: 22px;
+        border-left: 1px solid var(--line);
+      }
+      .step::before {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background: var(--amber);
+        transition: width 0.7s ease;
+      }
+      .step.on::before {
+        width: 100%;
+      }
+      .step-n {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--amber);
+      }
+      .step h3 {
+        margin: 10px 0 10px;
+        font-size: 19px;
+      }
+      .step p {
+        font-size: 14px;
+        color: #454e55;
+      }
+      .step b {
+        font-weight: 600;
+        color: var(--ink);
+        border-bottom: 1px solid var(--amber);
+      }
+
+      /* =========================================================
+   TABLE DE SYMBOLES (compétences)
+========================================================= */
+      .table {
+        margin-top: 44px;
+        border-top: 2px solid var(--ink);
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 96px 1.1fr 1.4fr;
+        gap: 20px;
+        padding: 16px 8px;
+        border-bottom: 1px solid var(--line);
+        transition: background 0.18s;
+      }
+      .row:hover {
+        background: var(--panel-2);
+      }
+      .row .tag {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--wire);
+      }
+      .row strong {
+        font-weight: 600;
+        font-size: 15px;
+      }
+      .row span {
+        font-size: 14px;
+        color: var(--ink-soft);
+      }
+      .row-head {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--ink-soft);
+        border-bottom: 1px solid var(--line);
+        padding: 10px 8px;
+        display: grid;
+        grid-template-columns: 96px 1.1fr 1.4fr;
+        gap: 20px;
+      }
+
+      /* =========================================================
+   FORMATION
+========================================================= */
+      .school {
+        background: var(--graphite);
+        color: #e9e7e1;
+        border-radius: 4px;
+        padding: 30px;
+        display: grid;
+        gap: 22px;
+      }
+      .school svg {
+        width: 100%;
+        height: auto;
+      }
+      .school h3 {
+        font-size: 24px;
+      }
+      .school p {
+        font-size: 14px;
+        color: #aab3b9;
+      }
+      .school-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .school-meta span {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: #d8dde1;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        padding: 5px 9px;
+        border-radius: 2px;
+      }
+      .edu {
+        display: grid;
+        gap: 0;
+        border-top: 2px solid var(--ink);
+      }
+      .edu-item {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 20px;
+        padding: 22px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .edu-item .yr {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--amber);
+      }
+      .edu-item p {
+        font-size: 14px;
+        color: var(--ink-soft);
+        margin-top: 4px;
+      }
+      .edu-item em {
+        font-style: normal;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .edu-badge {
+        display: inline-block;
+        margin-top: 8px;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: var(--wire);
+        border: 1px solid var(--line);
+        padding: 3px 8px;
+        border-radius: 2px;
+      }
+
+      /* =========================================================
+   PROJETS FUTURS — cartes en perspective
+========================================================= */
+      .future {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-top: 44px;
+        perspective: 1200px;
+      }
+      .pcard {
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 26px;
+        transform-style: preserve-3d;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+        will-change: transform;
+      }
+      .pcard:hover {
+        box-shadow: -18px 22px 40px rgba(60, 55, 45, 0.18);
+      }
+      .pcard .num {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--amber);
+      }
+      .pcard h3 {
+        margin: 12px 0 10px;
+        font-size: 20px;
+      }
+      .pcard p {
+        font-size: 14px;
+        color: #4b545b;
+      }
+      .pcard .glyph {
+        height: 54px;
+        margin-bottom: 6px;
+        color: var(--wire);
+      }
+
+      /* =========================================================
+   LANGUES + INTERETS
+========================================================= */
+      .lang {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 34px;
+        margin-top: 40px;
+      }
+      .lang-item {
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+      }
+      .lang-item .t {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 12px;
+      }
+      .lang-item strong {
+        font-family: var(--cond);
+        font-size: 20px;
+      }
+      .lang-item small {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--ink-soft);
+      }
+      .gauge {
+        display: flex;
+        gap: 4px;
+      }
+      .gauge i {
+        flex: 1;
+        height: 10px;
+        background: var(--panel-3);
+        border-radius: 1px;
+      }
+      .gauge i.f {
+        background: var(--amber);
+      }
+
+      /* =========================================================
+   CONTACT
+========================================================= */
+      .contact {
+        background: var(--graphite);
+        color: #eceae4;
+      }
+      .contact h2 {
+        color: #fff;
+      }
+      .contact .kicker {
+        color: #9aa4ac;
+      }
+      .cgrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 40px;
+      }
+      .cbox {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 3px;
+        padding: 20px;
+        transition: 0.2s;
+        display: block;
+      }
+      a.cbox:hover {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: var(--amber);
+      }
+      .cbox small {
+        display: block;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: #8d969d;
+        margin-bottom: 8px;
+      }
+      .cbox p {
+        font-size: 14.5px;
+        color: #e6e3dd;
+        word-break: break-word;
+      }
+      .dl-row {
+        margin-top: 26px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      footer {
+        background: var(--graphite-2);
+        color: #8d969d;
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 20px max(5vw, 20px);
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* =========================================================
+   REVEAL DISCRET
+========================================================= */
+      .rv {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+          opacity 0.5s ease,
+          transform 0.5s ease;
+      }
+      .rv.show {
+        opacity: 1;
+        transform: none;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        .rv {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+        .pcard {
+          transition: none;
+        }
+      }
+
+      /* =========================================================
+   RESPONSIVE
+========================================================= */
+      @media (max-width: 940px) {
+        .topbar nav {
+          display: none;
+          position: absolute;
+          top: 62px;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          gap: 0;
+          padding: 8px max(5vw, 20px) 16px;
+          background: rgba(27, 32, 36, 0.98);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .topbar nav.open {
+          display: flex;
+        }
+        .topbar nav a {
+          padding: 12px 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .burger {
+          display: block;
+        }
+        .hero-grid,
+        .split,
+        .lang {
+          grid-template-columns: 1fr;
+        }
+        .stage {
+          height: 330px;
+        }
+        .cycle {
+          grid-template-columns: 1fr 1fr;
+        }
+        .step + .step {
+          padding-left: 0;
+          border-left: 0;
+        }
+        .cycle .step {
+          padding-right: 16px;
+        }
+        .future {
+          grid-template-columns: 1fr;
+        }
+        .cgrid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 560px) {
+        .section {
+          padding: 74px 0;
+        }
+        .hero {
+          padding-top: 110px;
+        }
+        .cycle {
+          grid-template-columns: 1fr;
+        }
+        .row,
+        .row-head {
+          grid-template-columns: 70px 1fr;
+          gap: 12px;
+        }
+        .row span {
+          grid-column: 2;
+        }
+        .row-head span:last-child {
+          display: none;
+        }
+        .edu-item {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+        .fact {
+          grid-template-columns: 1fr;
+          gap: 2px;
+        }
+        .stage-hud {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="progress" id="progress"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#top">
+        <span class="plate">YE</span>
+        Youssef Elkhamlichi
+      </a>
+      <button
+        class="burger"
+        id="burger"
+        aria-label="Ouvrir le menu"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <nav id="nav">
+        <a href="#profil">Profil</a>
+        <a href="#experience">Expérience</a>
+        <a href="#competences">Compétences</a>
+        <a href="#formation">Formation</a>
+        <a href="#projets">Projets à venir</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="status"
+            ><i class="led"></i> Disponible pour un poste ou un stage —
+            Tanger</span
+          >
+
+          <h1>Youssef<em>Elkhamlichi</em></h1>
+          <p class="role">Automaticien &amp; électrotechnicien</p>
+
+          <p>
+            Diplômé en automatisation industrielle, spécialisé en électronique,
+            automatisme et robotique, avec une première expérience pratique en
+            programmation et maintenance de systèmes automatisés.
+          </p>
+
+          <div class="cta">
+            <a class="btn btn-main" href="#experience">Voir mon parcours</a>
+            <a
+              class="btn btn-ghost"
+              id="cvDownload"
+              href="#"
+              download="Youssef-Elkhamlichi-CV.pdf"
+              >⬇ Télécharger le CV (PDF)</a
+            >
+            <a class="btn btn-ghost" href="#contact">M'écrire</a>
+          </div>
+
+          <div class="readout">
+            <span>TIA Portal V17</span>
+            <span>LADDER</span>
+            <span>PROFINET</span>
+            <span>Siemens ET200 SP</span>
+            <span>Keyence IV-500CA</span>
+          </div>
+        </div>
+
+        <div class="stage" id="stage">
+          <canvas
+            id="scene"
+            aria-label="Maquette 3D animée d'une station de chargement et déchargement avec contrôle par caméra"
+          ></canvas>
+          <div class="stage-hud" id="stageHud">
+            <div class="hud-row"><span>AUTO</span><i class="dot"></i></div>
+            <div class="hud-row">
+              <span id="hudCount">PIÈCES: 0</span><i class="dot"></i>
+            </div>
+            <div class="hud-row">
+              <span id="hudFault">TRI: —</span><i class="dot warn"></i>
+            </div>
+          </div>
+          <div class="stage-fallback" id="fallback">
+            Station de chargement / déchargement<br />convoyeur · caméra de
+            contrôle · tri
+          </div>
+          <span class="stage-tag"
+            >Station de chargement / déchargement — cycle en marche</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROFIL ============ -->
+    <section class="section" id="profil">
+      <div class="wrap split">
+        <div class="rv">
+          <p class="kicker">Profil</p>
+          <h2>Je programme, je câble, je mets en service.</h2>
+          <p class="lead">
+            Diplômé en automatisation industrielle avec une expérience pratique
+            en programmation et maintenance de systèmes automatisés. Je souhaite
+            contribuer à des projets innovants et évoluer dans un environnement
+            dynamique.
+          </p>
+          <div class="chips">
+            <span class="chip">Programmation</span>
+            <span class="chip">Automatisation</span>
+            <span class="chip">Maintenance</span>
+            <span class="chip">Électronique</span>
+            <span class="chip">Robotique</span>
+            <span class="chip">Énergie durable</span>
+          </div>
+        </div>
+
+        <dl class="facts rv">
+          <div class="fact">
+            <dt>Basé à</dt>
+            <dd>Hay Bir El Ghazi Aouama, Tanger</dd>
+          </div>
+          <div class="fact">
+            <dt>Diplôme</dt>
+            <dd>
+              Technicien spécialisé — génie électrique, option électronique,
+              automatisme et robotique
+            </dd>
+          </div>
+          <div class="fact">
+            <dt>Expérience</dt>
+            <dd>Stage automaticien chez ARM Solutions Maroc</dd>
+          </div>
+          <div class="fact">
+            <dt>Langues</dt>
+            <dd>Français (bien), anglais (scolaire)</dd>
+          </div>
+          <div class="fact">
+            <dt>Intérêts</dt>
+            <dd>
+              Programmation, formation continue, nouvelles technologies, énergie
+              durable
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ EXPERIENCE ============ -->
+    <section class="section" id="experience">
+      <div class="wrap">
+        <div class="rv">
+          <p class="kicker">Expérience professionnelle</p>
+          <h2>Du programme à la machine.</h2>
+        </div>
+
+        <div class="job-head rv">
+          <h3>ARM Solutions Maroc</h3>
+          <p>
+            Stagiaire automaticien · station de chargement et déchargement de
+            pièces
+          </p>
+        </div>
+
+        <div class="cycle" id="cycle">
+          <article class="step">
+            <span class="step-n">Étape 01</span>
+            <h3>Programmation du cycle</h3>
+            <p>
+              Développement et structuration du cycle complet de fonctionnement
+              de la station sous <b>TIA Portal V17</b>, avec des blocs de
+              programme en <b>LADDER</b>.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-n">Étape 02</span>
+            <h3>Interface opérateur</h3>
+            <p>
+              Participation à la conception et à la configuration des interfaces
+              <b>homme-machine</b> permettant de commander et de surveiller les
+              opérations.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-n">Étape 03</span>
+            <h3>Contrôle par vision</h3>
+            <p>
+              Configuration et mise en service d'une caméra
+              <b>Keyence IV-500CA</b> via <b>IV-Navigator</b> pour le contrôle
+              automatique de conformité et le tri des pièces.
+            </p>
+          </article>
+
+          <article class="step">
+            <span class="step-n">Étape 04</span>
+            <h3>Capteurs et réseau</h3>
+            <p>
+              Paramétrage d'un capteur laser de détection de présence et
+              configuration de l'échange de données en <b>PROFINET</b> entre
+              l'automate <b>Siemens ET200 SP</b> et la caméra.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COMPETENCES ============ -->
+    <section class="section" id="competences">
+      <div class="wrap">
+        <div class="rv">
+          <p class="kicker">Compétences techniques</p>
+          <h2>Une base technique polyvalente.</h2>
+        </div>
+
+        <div class="table rv">
+          <div class="row-head">
+            <span>Domaine</span><span>Compétence</span><span>Détail</span>
+          </div>
+
+          <div class="row">
+            <span class="tag">PLC</span
+            ><strong>Automates programmables industriels</strong
+            ><span>Programmation d'automates Siemens</span>
+          </div>
+          <div class="row">
+            <span class="tag">LAD</span><strong>Programmation LADDER</strong
+            ><span>TIA Portal V17 · logique de commande</span>
+          </div>
+          <div class="row">
+            <span class="tag">HMI</span><strong>Interfaces homme-machine</strong
+            ><span>Conception et configuration des vues opérateur</span>
+          </div>
+          <div class="row">
+            <span class="tag">VIS</span><strong>Vision industrielle</strong
+            ><span>Keyence IV-500CA · IV-Navigator</span>
+          </div>
+          <div class="row">
+            <span class="tag">NET</span
+            ><strong>Capteurs et réseaux industriels</strong
+            ><span>Capteur laser · PROFINET · Siemens ET200 SP</span>
+          </div>
+          <div class="row">
+            <span class="tag">ELEC</span><strong>Électrotechnique</strong
+            ><span>Commande électrique des moteurs C.C. et C.A.</span>
+          </div>
+          <div class="row">
+            <span class="tag">PNEU</span
+            ><strong>Pneumatique et hydraulique</strong
+            ><span>Technologies des systèmes industriels</span>
+          </div>
+          <div class="row">
+            <span class="tag">MCU</span
+            ><strong>Microcontrôleurs et électronique</strong
+            ><span
+              >Programmation en C · réalisation de cartes électroniques</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FORMATION ============ -->
+    <section class="section" id="formation">
+      <div class="wrap split">
+        <div class="rv">
+          <p class="kicker">Formation</p>
+          <h2>L'atelier avant la théorie.</h2>
+
+          <div class="school" style="margin-top: 28px">
+            <svg
+              viewBox="0 0 420 200"
+              role="img"
+              aria-label="Illustration de l'ISTA TFZ Tanger"
+            >
+              <defs>
+                <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#2b3238" />
+                  <stop offset="1" stop-color="#1b2024" />
+                </linearGradient>
+                <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#d8850c" stop-opacity="0" />
+                  <stop offset=".5" stop-color="#d8850c" stop-opacity=".55" />
+                  <stop offset="1" stop-color="#d8850c" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <rect width="420" height="200" fill="url(#sky)" />
+              <line
+                x1="0"
+                y1="150"
+                x2="420"
+                y2="150"
+                stroke="#3c454c"
+                stroke-width="1"
+              />
+              <rect
+                x="70"
+                y="62"
+                width="200"
+                height="88"
+                fill="none"
+                stroke="#c9ccd0"
+                stroke-width="1.4"
+              />
+              <rect
+                x="270"
+                y="90"
+                width="82"
+                height="60"
+                fill="none"
+                stroke="#8d969d"
+                stroke-width="1.2"
+              />
+              <g stroke="#d8850c" stroke-width="1.1" opacity=".9">
+                <rect x="86" y="78" width="22" height="16" />
+                <rect x="118" y="78" width="22" height="16" />
+                <rect x="150" y="78" width="22" height="16" />
+                <rect x="182" y="78" width="22" height="16" />
+                <rect x="214" y="78" width="22" height="16" />
+                <rect x="86" y="106" width="22" height="16" />
+                <rect x="118" y="106" width="22" height="16" />
+                <rect x="182" y="106" width="22" height="16" />
+                <rect x="214" y="106" width="22" height="16" />
+              </g>
+              <rect
+                x="150"
+                y="106"
+                width="22"
+                height="44"
+                fill="none"
+                stroke="#c9ccd0"
+                stroke-width="1.2"
+              />
+              <g stroke="#8d969d" stroke-width="1">
+                <rect x="284" y="104" width="18" height="14" />
+                <rect x="312" y="104" width="18" height="14" />
+                <rect x="284" y="126" width="18" height="14" />
+                <rect x="312" y="126" width="18" height="14" />
+              </g>
+              <line
+                x1="96"
+                y1="62"
+                x2="96"
+                y2="34"
+                stroke="#8d969d"
+                stroke-width="1"
+              />
+              <circle cx="96" cy="31" r="3" fill="#4f9a5f" />
+              <rect
+                x="40"
+                y="118"
+                width="20"
+                height="32"
+                fill="none"
+                stroke="#2c6d8e"
+                stroke-width="1.2"
+              />
+              <line
+                x1="40"
+                y1="128"
+                x2="60"
+                y2="128"
+                stroke="#2c6d8e"
+                stroke-width="1"
+              />
+              <path
+                d="M60 134 C 120 168, 240 168, 352 138"
+                fill="none"
+                stroke="#2c6d8e"
+                stroke-width="1"
+                stroke-dasharray="3 4"
+              />
+              <rect x="0" y="150" width="420" height="4" fill="url(#glow)" />
+              <g
+                font-family="IBM Plex Mono, monospace"
+                font-size="9"
+                fill="#8d969d"
+              >
+                <text x="76" y="72">ISTA · TFZ</text>
+                <text x="276" y="98">ATELIER</text>
+              </g>
+            </svg>
+            <div>
+              <h3>ISTA TFZ Tanger</h3>
+              <p>
+                Génie électrique, option électronique, automatisme et robotique
+                — l'atelier où le câblage, l'automate et le banc d'essai
+                remplacent le tableau.
+              </p>
+              <div class="school-meta">
+                <span>Zone franche de Tanger</span>
+                <span>Ateliers automates &amp; HMI</span>
+                <span>Bancs d'essai industriels</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="edu rv">
+          <div class="edu-item">
+            <span class="yr">2024 — 2026</span>
+            <div>
+              <em>Diplôme de technicien spécialisé</em>
+              <p>
+                ISTA TFZ Tanger · génie électrique, option électronique,
+                automatisme et robotique.
+              </p>
+              <span class="edu-badge">Automatisme &amp; robotique</span>
+            </div>
+          </div>
+          <div class="edu-item">
+            <span class="yr">2023 — 2024</span>
+            <div>
+              <em>Baccalauréat professionnel</em>
+              <p>Lycée Abi Bakr Arrazzi · maintenance industrielle.</p>
+              <span class="edu-badge">Maintenance industrielle</span>
+            </div>
+          </div>
+          <div class="edu-item">
+            <span class="yr">2023 — 2024</span>
+            <div>
+              <em>Formation en maintenance industrielle</em>
+              <p>ISTA Route Aéroport, Tanger.</p>
+              <span class="edu-badge">Électromécanique</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROJETS FUTURS ============ -->
+    <section class="section" id="projets">
+      <div class="wrap">
+        <div class="rv">
+          <p class="kicker">Ce que je veux construire</p>
+          <h2>Les machines que je prépare pour la suite.</h2>
+          <p class="lead">
+            Quatre chantiers qui prolongent ce que j'ai déjà mis en service en
+            stage.
+          </p>
+        </div>
+
+        <div class="future" id="future">
+          <article class="pcard">
+            <svg
+              class="glyph"
+              viewBox="0 0 60 54"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+            >
+              <rect x="4" y="34" width="52" height="8" />
+              <circle cx="14" cy="46" r="4" />
+              <circle cx="46" cy="46" r="4" />
+              <path d="M20 34 V18 h14" />
+              <path d="M34 18 l8 8" />
+              <rect x="26" y="24" width="10" height="8" />
+            </svg>
+            <span class="num">Projet 01</span>
+            <h3>Cellule de tri robotisée</h3>
+            <p>
+              Relier le contrôle vision Keyence à un bras robot pour trier les
+              pièces non conformes sans intervention de l'opérateur.
+            </p>
+          </article>
+
+          <article class="pcard">
+            <svg
+              class="glyph"
+              viewBox="0 0 60 54"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+            >
+              <rect x="6" y="10" width="48" height="30" />
+              <path d="M14 32 l8-10 7 7 6-12 7 15" />
+              <path d="M24 46h12" />
+              <path d="M30 40v6" />
+            </svg>
+            <span class="num">Projet 02</span>
+            <h3>Supervision et données machine</h3>
+            <p>
+              Remonter les compteurs de production, les défauts et les temps
+              d'arrêt vers un poste de supervision, pour décider sur des
+              chiffres et non au ressenti.
+            </p>
+          </article>
+
+          <article class="pcard">
+            <svg
+              class="glyph"
+              viewBox="0 0 60 54"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+            >
+              <circle cx="30" cy="27" r="13" />
+              <path d="M30 14v13l8 5" />
+              <path d="M6 27h8M46 27h8" />
+              <path d="M30 6v4M30 44v4" />
+            </svg>
+            <span class="num">Projet 03</span>
+            <h3>Maintenance prédictive</h3>
+            <p>
+              Capteurs de vibration et de température sur les moteurs, seuils
+              gérés dans l'automate, alerte avant la panne plutôt qu'après
+              l'arrêt de ligne.
+            </p>
+          </article>
+
+          <article class="pcard">
+            <svg
+              class="glyph"
+              viewBox="0 0 60 54"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+            >
+              <path d="M10 34 l12-20 12 20z" />
+              <rect x="34" y="20" width="18" height="14" />
+              <path d="M14 42h34" />
+              <path d="M26 4v6M34 8l-3 5" />
+            </svg>
+            <span class="num">Projet 04</span>
+            <h3>Armoire à énergie durable</h3>
+            <p>
+              Alimenter un banc d'essai automatisé en solaire, avec gestion de
+              charge et bilan de consommation affiché sur l'IHM.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LANGUES ============ -->
+    <section class="section">
+      <div class="wrap">
+        <div class="rv">
+          <p class="kicker">Langues</p>
+          <h2>Communication professionnelle.</h2>
+        </div>
+
+        <div class="lang rv">
+          <div class="lang-item">
+            <div class="t">
+              <strong>Français</strong><small>Niveau bien</small>
+            </div>
+            <div class="gauge" data-level="6">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+          <div class="lang-item">
+            <div class="t">
+              <strong>Anglais</strong><small>Niveau scolaire</small>
+            </div>
+            <div class="gauge" data-level="4">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section contact" id="contact">
+      <div class="wrap">
+        <p class="kicker">Contact</p>
+        <h2>Construisons quelque chose d'utile.</h2>
+
+        <div class="cgrid">
+          <a class="cbox" href="mailto:elkhamlichiyoussef08@gmail.com">
+            <small>E-mail</small>
+            <p>elkhamlichiyoussef08@gmail.com</p>
+          </a>
+          <a class="cbox" href="tel:+212603313428">
+            <small>Téléphone</small>
+            <p>+212 603-313428</p>
+          </a>
+          <div class="cbox">
+            <small>Localisation</small>
+            <p>Hay Bir El Ghazi Aouama, Tanger</p>
+          </div>
+          <div class="cbox">
+            <small>LinkedIn</small>
+            <p>elkhamlichi youssef</p>
+          </div>
+        </div>
+
+        <div class="dl-row">
+          <a
+            class="btn btn-main"
+            id="cvDownload2"
+            href="#"
+            download="Youssef-Elkhamlichi-CV.pdf"
+            >⬇ Télécharger le CV (PDF)</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© 2026 Youssef Elkhamlichi</span>
+      <span>Automaticien &amp; électrotechnicien — Tanger</span>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      /* barre de progression de lecture */
+      var progressBar = document.getElementById("progress");
+      window.addEventListener(
+        "scroll",
+        function () {
+          var h = document.documentElement;
+          var pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+          if (progressBar)
+            progressBar.style.width = (isFinite(pct) ? pct : 0) + "%";
+        },
+        { passive: true },
+      );
+
+      /* spotlight ambre qui suit le curseur dans le hero */
+      (function () {
+        var heroEl = document.querySelector(".hero");
+        if (!heroEl) return;
+        heroEl.addEventListener("mousemove", function (e) {
+          var r = heroEl.getBoundingClientRect();
+          heroEl.style.setProperty(
+            "--mx",
+            ((e.clientX - r.left) / r.width) * 100 + "%",
+          );
+          heroEl.style.setProperty(
+            "--my",
+            ((e.clientY - r.top) / r.height) * 100 + "%",
+          );
+        });
+      })();
+
+      var burger = document.getElementById("burger");
+      var nav = document.getElementById("nav");
+      burger.addEventListener("click", function () {
+        var open = nav.classList.toggle("open");
+        burger.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      nav.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          nav.classList.remove("open");
+        });
+      });
+
+      var reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            e.target.classList.add("show");
+
+            e.target.querySelectorAll(".gauge").forEach(function (g) {
+              var n = parseInt(g.dataset.level, 10);
+              g.querySelectorAll("i").forEach(function (bar, i) {
+                setTimeout(
+                  function () {
+                    if (i < n) bar.classList.add("f");
+                  },
+                  reduced ? 0 : i * 70,
+                );
+              });
+            });
+            io.unobserve(e.target);
+          });
+        },
+        { threshold: 0.15 },
+      );
+      document.querySelectorAll(".rv").forEach(function (el) {
+        io.observe(el);
+      });
+
+      var cycle = document.getElementById("cycle");
+      var cio = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            cycle.querySelectorAll(".step").forEach(function (s, i) {
+              setTimeout(
+                function () {
+                  s.classList.add("on");
+                },
+                reduced ? 0 : i * 260,
+              );
+            });
+            cio.unobserve(e.target);
+          });
+        },
+        { threshold: 0.3 },
+      );
+      cio.observe(cycle);
+
+      if (!reduced && window.matchMedia("(pointer:fine)").matches) {
+        document.querySelectorAll(".pcard").forEach(function (card) {
+          card.addEventListener("mousemove", function (ev) {
+            var r = card.getBoundingClientRect();
+            var x = (ev.clientX - r.left) / r.width - 0.5;
+            var y = (ev.clientY - r.top) / r.height - 0.5;
+            card.style.transform =
+              "rotateX(" +
+              -y * 7 +
+              "deg) rotateY(" +
+              x * 9 +
+              "deg) translateZ(14px)";
+          });
+          card.addEventListener("mouseleave", function () {
+            card.style.transform = "";
+          });
+        });
+      }
+
+      /* ============ Génération du CV en PDF côté client (jsPDF) ============ */
+      (function () {
+        var script = document.createElement("script");
+        script.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+        script.onerror = function () {
+          // Fiabilité : si la lib ne charge pas, le bouton ouvre simplement la page à imprimer
+          document
+            .querySelectorAll("#cvDownload,#cvDownload2")
+            .forEach(function (b) {
+              b.addEventListener("click", function (ev) {
+                ev.preventDefault();
+                window.print();
+              });
+            });
+        };
+        script.onload = function () {
+          function buildCV() {
+            try {
+              var jsPDFLib = window.jspdf && window.jspdf.jsPDF;
+              if (!jsPDFLib) throw new Error("jsPDF indisponible");
+              var doc = new jsPDFLib({ unit: "mm", format: "a4" });
+              var amber = [216, 133, 12],
+                ink = [32, 38, 43],
+                soft = [92, 102, 110],
+                line = [195, 191, 181];
+              var y = 20,
+                left = 16,
+                right = 194;
+
+              doc.setFont("helvetica", "bold");
+              doc.setFontSize(22);
+              doc.setTextColor.apply(doc, ink);
+              doc.text("Youssef Elkhamlichi", left, y);
+              y += 7;
+              doc.setFont("helvetica", "normal");
+              doc.setFontSize(12);
+              doc.setTextColor.apply(doc, amber);
+              doc.text("Automaticien & électrotechnicien", left, y);
+              y += 5;
+              doc.setDrawColor.apply(doc, amber);
+              doc.setLineWidth(1);
+              doc.line(left, y, right, y);
+              y += 7;
+
+              doc.setFontSize(10);
+              doc.setTextColor.apply(doc, soft);
+              doc.text(
+                "elkhamlichiyoussef08@gmail.com   ·   +212 603-313428   ·   Hay Bir El Ghazi Aouama, Tanger",
+                left,
+                y,
+              );
+              y += 10;
+
+              function h(title) {
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.setTextColor.apply(doc, ink);
+                doc.text(title.toUpperCase(), left, y);
+                y += 1.5;
+                doc.setDrawColor.apply(doc, line);
+                doc.setLineWidth(0.3);
+                doc.line(left, y, right, y);
+                y += 6;
+              }
+              function body(text, size) {
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(size || 10);
+                doc.setTextColor.apply(doc, ink);
+                var lines = doc.splitTextToSize(text, right - left);
+                doc.text(lines, left, y);
+                y += lines.length * (size ? size * 0.42 : 4.6) + 3;
+              }
+
+              h("Profil");
+              body(
+                "Diplômé en automatisation industrielle avec une expérience pratique en programmation et maintenance de systèmes automatisés. Je souhaite contribuer à des projets innovants et évoluer dans un environnement dynamique.",
+              );
+
+              h("Expérience professionnelle");
+              doc.setFont("helvetica", "bold");
+              doc.setFontSize(10.5);
+              doc.text("ARM Solutions Maroc — Stagiaire automaticien", left, y);
+              y += 5;
+              body(
+                "Station de chargement et déchargement de pièces : programmation du cycle sous TIA Portal V17 (LADDER), conception d'interfaces homme-machine, mise en service d'une caméra Keyence IV-500CA (IV-Navigator) pour le contrôle de conformité, paramétrage d'un capteur laser et configuration PROFINET entre l'automate Siemens ET200 SP et la caméra.",
+                10,
+              );
+
+              h("Compétences techniques");
+              body(
+                "Automates programmables (Siemens), programmation LADDER (TIA Portal V17), interfaces homme-machine, vision industrielle (Keyence), capteurs et réseaux industriels (PROFINET), électrotechnique (moteurs C.C./C.A.), pneumatique et hydraulique, microcontrôleurs et électronique (programmation C).",
+              );
+
+              h("Formation");
+              body(
+                "2024–2026 — Diplôme de technicien spécialisé, ISTA TFZ Tanger (génie électrique, option électronique, automatisme et robotique)",
+                10,
+              );
+              body(
+                "2023–2024 — Baccalauréat professionnel, Lycée Abi Bakr Arrazzi (maintenance industrielle)",
+                10,
+              );
+              body(
+                "2023–2024 — Formation en maintenance industrielle, ISTA Route Aéroport, Tanger",
+                10,
+              );
+
+              h("Langues");
+              body("Français : bien   ·   Anglais : scolaire", 10);
+
+              doc.setFontSize(8.5);
+              doc.setTextColor.apply(doc, soft);
+              doc.text(
+                "CV généré depuis le portfolio — elkhamlichiyoussef08@gmail.com",
+                left,
+                287,
+              );
+
+              return doc;
+            } catch (err) {
+              console.error("Erreur génération CV PDF :", err);
+              return null;
+            }
+          }
+
+          document
+            .querySelectorAll("#cvDownload,#cvDownload2")
+            .forEach(function (btn) {
+              btn.addEventListener("click", function (ev) {
+                ev.preventDefault();
+                var doc = buildCV();
+                if (doc) {
+                  doc.save("Youssef-Elkhamlichi-CV.pdf");
+                } else {
+                  window.print();
+                } // repli fiable si la génération échoue
+              });
+            });
+        };
+        document.head.appendChild(script);
+      })();
+
+      /* ============ Scène 3D — station de chargement/déchargement ============ */
+      (function () {
+        var canvas = document.getElementById("scene");
+        var stage = document.getElementById("stage");
+        var hud = document.getElementById("stageHud");
+        var hudCount = document.getElementById("hudCount");
+        var hudFault = document.getElementById("hudFault");
+        var partsDone = 0,
+          faultsHandled = 0;
+
+        function showFallback() {
+          document.getElementById("fallback").style.display = "grid";
+          canvas.style.display = "none";
+          if (hud) hud.style.display = "none";
+        }
+
+        if (typeof THREE === "undefined") {
+          showFallback();
+          return;
+        }
+
+        var renderer;
+        try {
+          renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            antialias: true,
+            alpha: false,
+            powerPreference: "high-performance",
+          });
+        } catch (e) {
+          showFallback();
+          return;
+        }
+
+        // Fiabilité : gestion de la perte de contexte WebGL (onglet en veille, GPU throttlé…)
+        var contextLost = false;
+        canvas.addEventListener(
+          "webglcontextlost",
+          function (ev) {
+            ev.preventDefault();
+            contextLost = true;
+          },
+          false,
+        );
+        canvas.addEventListener(
+          "webglcontextrestored",
+          function () {
+            contextLost = false;
+          },
+          false,
+        );
+
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(stage.clientWidth, stage.clientHeight, false);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        var scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x171b1f);
+        scene.fog = new THREE.Fog(0x171b1f, 24, 50);
+
+        var camera = new THREE.PerspectiveCamera(
+          38,
+          stage.clientWidth / stage.clientHeight,
+          0.1,
+          100,
+        );
+        camera.position.set(11, 7.6, 13);
+        camera.lookAt(0, 1.4, 0);
+
+        scene.add(new THREE.HemisphereLight(0xa9b6c0, 0x14181c, 0.9));
+        var key = new THREE.DirectionalLight(0xffffff, 0.9);
+        key.position.set(8, 14, 9);
+        key.castShadow = true;
+        key.shadow.mapSize.set(1024, 1024);
+        key.shadow.camera.left = -14;
+        key.shadow.camera.right = 14;
+        key.shadow.camera.top = 10;
+        key.shadow.camera.bottom = -10;
+        scene.add(key);
+        var amberLight = new THREE.PointLight(0xd8850c, 1.4, 26);
+        amberLight.position.set(-5, 5.5, 3);
+        scene.add(amberLight);
+        var rimLight = new THREE.PointLight(0x2c6d8e, 0.8, 20);
+        rimLight.position.set(6, 3, -6);
+        scene.add(rimLight);
+
+        var MAT = {
+          steel: new THREE.MeshStandardMaterial({
+            color: 0x6e7880,
+            metalness: 0.55,
+            roughness: 0.5,
+          }),
+          dark: new THREE.MeshStandardMaterial({
+            color: 0x2a3037,
+            metalness: 0.35,
+            roughness: 0.75,
+          }),
+          belt: new THREE.MeshStandardMaterial({
+            color: 0x1f242a,
+            metalness: 0.2,
+            roughness: 0.95,
+          }),
+          part: new THREE.MeshStandardMaterial({
+            color: 0xb9c1c7,
+            metalness: 0.45,
+            roughness: 0.45,
+          }),
+          bad: new THREE.MeshStandardMaterial({
+            color: 0xd8850c,
+            metalness: 0.3,
+            roughness: 0.5,
+          }),
+          cab: new THREE.MeshStandardMaterial({
+            color: 0x3a4249,
+            metalness: 0.4,
+            roughness: 0.6,
+          }),
+          glass: new THREE.MeshStandardMaterial({
+            color: 0x2c6d8e,
+            metalness: 0.2,
+            roughness: 0.2,
+            transparent: true,
+            opacity: 0.55,
+          }),
+        };
+
+        var root = new THREE.Group();
+        scene.add(root);
+
+        var floor = new THREE.Mesh(
+          new THREE.PlaneGeometry(46, 46),
+          new THREE.MeshStandardMaterial({
+            color: 0x1b2025,
+            roughness: 0.35,
+            metalness: 0.2,
+          }),
+        );
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.y = -0.02;
+        floor.receiveShadow = true;
+        root.add(floor);
+        var grid = new THREE.GridHelper(46, 46, 0x39434b, 0x262d33);
+        grid.position.y = 0.01;
+        root.add(grid);
+
+        // Halos lumineux additifs (effet "bloom" sans post-processing) sur les points chauds
+        function makeGlowTexture() {
+          var c = document.createElement("canvas");
+          c.width = c.height = 128;
+          var ctx = c.getContext("2d");
+          var g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+          g.addColorStop(0, "rgba(255,255,255,1)");
+          g.addColorStop(0.35, "rgba(255,255,255,.55)");
+          g.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, 128, 128);
+          return new THREE.CanvasTexture(c);
+        }
+        var glowTex = makeGlowTexture();
+        function addGlow(x, y, z, color, scale) {
+          var mat = new THREE.SpriteMaterial({
+            map: glowTex,
+            color: color,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+          });
+          var spr = new THREE.Sprite(mat);
+          spr.position.set(x, y, z);
+          spr.scale.set(scale, scale, 1);
+          root.add(spr);
+          return spr;
+        }
+        var glowAmber = addGlow(-5, 5.5, 3, 0xd8850c, 3.4);
+        var glowRim = addGlow(6, 3, -6, 0x2c6d8e, 3.0);
+        var glowScan = addGlow(1.2, BELT_Y + 0.5, 0, 0x4f9a5f, 1.6);
+
+        // Poussière/particules en suspension — profondeur et ambiance "atelier"
+        var DUST_N = 140;
+        var dustGeo = new THREE.BufferGeometry();
+        var dustPos = new Float32Array(DUST_N * 3);
+        for (var dpI = 0; dpI < DUST_N; dpI++) {
+          dustPos[dpI * 3] = (Math.random() - 0.5) * 26;
+          dustPos[dpI * 3 + 1] = Math.random() * 6 + 0.2;
+          dustPos[dpI * 3 + 2] = (Math.random() - 0.5) * 14;
+        }
+        dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+        var dustMat = new THREE.PointsMaterial({
+          color: 0xc9d1d6,
+          size: 0.035,
+          transparent: true,
+          opacity: 0.35,
+          sizeAttenuation: true,
+          map: glowTex,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+        var dust = new THREE.Points(dustGeo, dustMat);
+        root.add(dust);
+
+        var BELT_L = 20,
+          BELT_W = 2.6,
+          BELT_Y = 1.5;
+
+        var belt = new THREE.Mesh(
+          new THREE.BoxGeometry(BELT_L, 0.22, BELT_W),
+          MAT.belt,
+        );
+        belt.position.y = BELT_Y;
+        belt.castShadow = true;
+        belt.receiveShadow = true;
+        root.add(belt);
+
+        [-1, 1].forEach(function (s) {
+          var rail = new THREE.Mesh(
+            new THREE.BoxGeometry(BELT_L, 0.34, 0.16),
+            MAT.steel,
+          );
+          rail.position.set(0, BELT_Y + 0.2, s * (BELT_W / 2 + 0.05));
+          rail.castShadow = true;
+          root.add(rail);
+        });
+
+        for (var i = -4; i <= 4; i++) {
+          var leg = new THREE.Mesh(
+            new THREE.BoxGeometry(0.2, BELT_Y, 0.2),
+            MAT.dark,
+          );
+          leg.position.set(i * 2.4, BELT_Y / 2, 0);
+          leg.castShadow = true;
+          root.add(leg);
+        }
+
+        var rollers = [];
+        for (var r = 0; r < 22; r++) {
+          var rol = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.16, 0.16, BELT_W - 0.1, 10),
+            MAT.steel,
+          );
+          rol.rotation.x = Math.PI / 2;
+          rol.position.set(-BELT_L / 2 + 0.6 + r * 0.9, BELT_Y + 0.16, 0);
+          rollers.push(rol);
+          root.add(rol);
+        }
+
+        var cabinet = new THREE.Mesh(
+          new THREE.BoxGeometry(2.1, 3.4, 1.1),
+          MAT.cab,
+        );
+        cabinet.position.set(-8.2, 1.7, -3.2);
+        cabinet.castShadow = true;
+        root.add(cabinet);
+        var door = new THREE.Mesh(
+          new THREE.BoxGeometry(1.7, 2.6, 0.06),
+          MAT.dark,
+        );
+        door.position.set(-8.2, 1.9, -2.62);
+        root.add(door);
+        // Rangée de disjoncteurs / voyants sur l'armoire — plus de détail
+        for (var d = 0; d < 4; d++) {
+          var breaker = new THREE.Mesh(
+            new THREE.BoxGeometry(0.16, 0.3, 0.04),
+            MAT.steel,
+          );
+          breaker.position.set(-8.7 + d * 0.3, 2.55, -2.6);
+          root.add(breaker);
+        }
+        var plcLed = new THREE.Mesh(
+          new THREE.SphereGeometry(0.09, 12, 12),
+          new THREE.MeshBasicMaterial({ color: 0x4f9a5f }),
+        );
+        plcLed.position.set(-7.6, 3.05, -2.6);
+        root.add(plcLed);
+        var plcLed2 = new THREE.Mesh(
+          new THREE.SphereGeometry(0.06, 10, 10),
+          new THREE.MeshBasicMaterial({ color: 0xd8850c }),
+        );
+        plcLed2.position.set(-7.4, 3.05, -2.6);
+        root.add(plcLed2);
+
+        var hmiBody = new THREE.Mesh(
+          new THREE.BoxGeometry(1.7, 1.15, 0.18),
+          MAT.cab,
+        );
+        hmiBody.position.set(-4.8, 2.9, -2.1);
+        hmiBody.rotation.y = 0.32;
+        hmiBody.castShadow = true;
+        root.add(hmiBody);
+        var hmiScreen = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.4, 0.86),
+          new THREE.MeshBasicMaterial({ color: 0x1d4f66 }),
+        );
+        hmiScreen.position.set(-4.72, 2.9, -2.0);
+        hmiScreen.rotation.y = 0.32;
+        root.add(hmiScreen);
+        var hmiStand = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.08, 0.08, 2.9, 8),
+          MAT.steel,
+        );
+        hmiStand.position.set(-4.8, 1.45, -2.15);
+        hmiStand.castShadow = true;
+        root.add(hmiStand);
+
+        var sensor = new THREE.Mesh(
+          new THREE.BoxGeometry(0.3, 0.5, 0.3),
+          MAT.bad,
+        );
+        sensor.position.set(-1.6, BELT_Y + 0.75, BELT_W / 2 + 0.45);
+        sensor.castShadow = true;
+        root.add(sensor);
+        var beam = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.015, 0.015, BELT_W + 0.9, 6),
+          new THREE.MeshBasicMaterial({
+            color: 0xff3b30,
+            transparent: true,
+            opacity: 0.55,
+          }),
+        );
+        beam.rotation.x = Math.PI / 2;
+        beam.position.set(-1.6, BELT_Y + 0.75, 0);
+        root.add(beam);
+
+        var camBody = new THREE.Mesh(
+          new THREE.BoxGeometry(0.7, 0.7, 1.0),
+          MAT.cab,
+        );
+        camBody.position.set(1.2, BELT_Y + 2.9, 0);
+        camBody.castShadow = true;
+        root.add(camBody);
+        var camLens = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.22, 0.3, 0.35, 16),
+          MAT.glass,
+        );
+        camLens.position.set(1.2, BELT_Y + 2.5, 0);
+        root.add(camLens);
+        var camMast = new THREE.Mesh(
+          new THREE.BoxGeometry(0.16, 3.4, 0.16),
+          MAT.steel,
+        );
+        camMast.position.set(1.2, BELT_Y + 1.8, -1.6);
+        camMast.castShadow = true;
+        root.add(camMast);
+        var camArm = new THREE.Mesh(
+          new THREE.BoxGeometry(0.16, 0.16, 1.6),
+          MAT.steel,
+        );
+        camArm.position.set(1.2, BELT_Y + 3.2, -0.8);
+        root.add(camArm);
+
+        var conMat = new THREE.MeshBasicMaterial({
+          color: 0x4f9a5f,
+          transparent: true,
+          opacity: 0.16,
+          side: THREE.DoubleSide,
+        });
+        var cone = new THREE.Mesh(
+          new THREE.ConeGeometry(1.0, 2.3, 20, 1, true),
+          conMat,
+        );
+        cone.position.set(1.2, BELT_Y + 1.2, 0);
+        cone.rotation.x = Math.PI;
+        root.add(cone);
+
+        var gx = 6.6;
+        [-1, 1].forEach(function (s) {
+          var post = new THREE.Mesh(
+            new THREE.BoxGeometry(0.24, 4.4, 0.24),
+            MAT.steel,
+          );
+          post.position.set(gx, 2.2, s * 2.2);
+          post.castShadow = true;
+          root.add(post);
+        });
+        var beamTop = new THREE.Mesh(
+          new THREE.BoxGeometry(0.3, 0.3, 4.7),
+          MAT.steel,
+        );
+        beamTop.position.set(gx, 4.4, 0);
+        beamTop.castShadow = true;
+        root.add(beamTop);
+
+        var gripper = new THREE.Group();
+        var grBody = new THREE.Mesh(
+          new THREE.BoxGeometry(0.7, 0.5, 0.7),
+          MAT.cab,
+        );
+        grBody.castShadow = true;
+        gripper.add(grBody);
+        [-1, 1].forEach(function (s) {
+          var f = new THREE.Mesh(
+            new THREE.BoxGeometry(0.1, 0.6, 0.12),
+            MAT.steel,
+          );
+          f.position.set(0, -0.5, s * 0.28);
+          gripper.add(f);
+        });
+        gripper.position.set(gx, 4.0, 0);
+        root.add(gripper);
+
+        var held = null;
+
+        var bin = new THREE.Mesh(
+          new THREE.BoxGeometry(1.8, 1.0, 1.8),
+          MAT.dark,
+        );
+        bin.position.set(gx, 0.5, 3.6);
+        bin.castShadow = true;
+        bin.receiveShadow = true;
+        root.add(bin);
+        // Petites pièces déjà triées, empilées dans le bac — donne du "poids" à la scène
+        for (var bp = 0; bp < 3; bp++) {
+          var stacked = new THREE.Mesh(
+            new THREE.BoxGeometry(0.6, 0.4, 0.6),
+            MAT.bad,
+          );
+          stacked.position.set(gx - 0.5 + bp * 0.5, 1.05, 3.4 + (bp % 2) * 0.4);
+          stacked.rotation.y = bp * 0.4;
+          stacked.castShadow = true;
+          root.add(stacked);
+        }
+
+        var parts = [];
+        var START = -BELT_L / 2 + 0.8;
+        var SPEED = 2.2;
+
+        function newPart(x) {
+          var p = new THREE.Mesh(
+            new THREE.BoxGeometry(0.85, 0.6, 0.85),
+            MAT.part,
+          );
+          p.position.set(x, BELT_Y + 0.42, 0);
+          p.castShadow = true;
+          p.receiveShadow = true;
+          p.userData = { scanned: false, ok: true, picked: false };
+          root.add(p);
+          parts.push(p);
+          return p;
+        }
+        for (var k = 0; k < 5; k++) {
+          newPart(START + k * 3.6);
+        }
+
+        var tx = 0,
+          ty = 0,
+          cx = 0,
+          cy = 0;
+        stage.addEventListener("mousemove", function (e) {
+          var r = stage.getBoundingClientRect();
+          tx = ((e.clientX - r.left) / r.width - 0.5) * 0.5;
+          ty = ((e.clientY - r.top) / r.height - 0.5) * 0.25;
+        });
+        stage.addEventListener("mouseleave", function () {
+          tx = 0;
+          ty = 0;
+        });
+        // Fiabilité : support tactile en plus de la souris
+        stage.addEventListener(
+          "touchmove",
+          function (e) {
+            if (!e.touches || !e.touches[0]) return;
+            var r = stage.getBoundingClientRect();
+            var touch = e.touches[0];
+            tx = ((touch.clientX - r.left) / r.width - 0.5) * 0.5;
+            ty = ((touch.clientY - r.top) / r.height - 0.5) * 0.25;
+          },
+          { passive: true },
+        );
+
+        var clock = new THREE.Clock();
+        var grPhase = 0;
+
+        // Intro caméra cinématique : la vue démarre reculée et large, puis se rapproche
+        var introStart = null;
+        var introDuration = 1.8;
+        var restPos = { x: 11, y: 7.6, z: 13 };
+        var farPos = { x: 20, y: 13.5, z: 22 };
+        camera.position.set(farPos.x, farPos.y, farPos.z);
+        camera.lookAt(0, 1.6, 0);
+        function easeOutCubic(u) {
+          return 1 - Math.pow(1 - u, 3);
+        }
+
+        // Fiabilité : ne pas animer/rendre quand la scène est hors écran ou l'onglet caché
+        var isVisible = true;
+        var vio = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              isVisible = e.isIntersecting;
+            });
+          },
+          { threshold: 0.05 },
+        );
+        vio.observe(stage);
+        document.addEventListener("visibilitychange", function () {
+          isVisible = isVisible && !document.hidden;
+        });
+
+        var rafId = null;
+
+        function frame() {
+          rafId = requestAnimationFrame(frame);
+          if (contextLost || document.hidden || !isVisible) {
+            if (introStart !== null) introStart = null; // repartira proprement au retour
+            return;
+          }
+
+          var dt = Math.min(clock.getDelta(), 0.05);
+          var t = clock.elapsedTime;
+
+          if (introStart === null) introStart = t;
+          var introU = reduced
+            ? 1
+            : Math.min(1, (t - introStart) / introDuration);
+          var introE = easeOutCubic(introU);
+
+          if (!reduced) {
+            glowAmber.material.opacity = 0.65 + Math.sin(t * 1.6) * 0.2;
+            glowRim.material.opacity = 0.5 + Math.sin(t * 1.1 + 1) * 0.18;
+            glowScan.material.opacity = 0.3 + Math.sin(t * 3) * 0.25;
+            dust.rotation.y += dt * 0.01;
+            var dp = dust.geometry.attributes.position.array;
+            for (var dpJ = 1; dpJ < dp.length; dpJ += 3) {
+              dp[dpJ] += dt * 0.06;
+              if (dp[dpJ] > 6.4) {
+                dp[dpJ] = 0.1;
+              }
+            }
+            dust.geometry.attributes.position.needsUpdate = true;
+          }
+
+          if (!reduced) {
+            for (var i = 0; i < rollers.length; i++) {
+              rollers[i].rotation.y += dt * 6;
+            }
+
+            for (var j = parts.length - 1; j >= 0; j--) {
+              var p = parts[j];
+              if (p.userData.picked) continue;
+              p.position.x += SPEED * dt;
+              p.rotation.y += dt * 0.15;
+
+              if (!p.userData.scanned && p.position.x > 1.2) {
+                p.userData.scanned = true;
+                p.userData.ok = Math.random() > 0.3;
+                if (!p.userData.ok) {
+                  p.material = MAT.bad;
+                }
+                conMat.color.setHex(p.userData.ok ? 0x4f9a5f : 0xd8850c);
+                conMat.opacity = 0.4;
+                glowScan.material.color.setHex(
+                  p.userData.ok ? 0x4f9a5f : 0xd8850c,
+                );
+                if (hudFault)
+                  hudFault.textContent =
+                    "TRI: " + (p.userData.ok ? "CONFORME" : "REJET");
+              }
+
+              if (
+                !p.userData.ok &&
+                !held &&
+                Math.abs(p.position.x - gx) < 0.12
+              ) {
+                held = p;
+                p.userData.picked = true;
+                grPhase = 0;
+              }
+
+              if (p.position.x > BELT_L / 2 - 0.5) {
+                root.remove(p);
+                parts.splice(j, 1);
+                partsDone++;
+                if (hudCount) hudCount.textContent = "PIÈCES: " + partsDone;
+              }
+            }
+
+            if (parts.length < 5) {
+              var last = parts.length
+                ? parts[parts.length - 1].position.x
+                : START + 3.6;
+              if (last > START + 3.2) {
+                newPart(START);
+              }
+            }
+
+            if (held) {
+              grPhase += dt;
+              if (grPhase < 0.55) {
+                gripper.position.y = 4.0 - (grPhase / 0.55) * 1.8;
+              } else if (grPhase < 1.4) {
+                var u = (grPhase - 0.55) / 0.85;
+                gripper.position.y = 2.2 + u * 1.6;
+                gripper.position.z = u * 3.6;
+              } else {
+                root.remove(held);
+                var idx = parts.indexOf(held);
+                if (idx > -1) parts.splice(idx, 1);
+                held = null;
+                faultsHandled++;
+                gripper.position.set(gx, 4.0, 0);
+              }
+              if (held) {
+                held.position.set(
+                  gripper.position.x,
+                  gripper.position.y - 0.85,
+                  gripper.position.z,
+                );
+              }
+            }
+
+            conMat.opacity += (0.16 - conMat.opacity) * dt * 3;
+            plcLed.visible = t % 1.2 < 0.9;
+            plcLed2.visible = t % 1.8 < 0.3;
+            beam.material.opacity = 0.35 + Math.sin(t * 8) * 0.15;
+            hmiScreen.material.color.setHex(t % 2 < 1 ? 0x1d4f66 : 0x22607a);
+          }
+
+          cx += (tx - cx) * 0.06;
+          cy += (ty - cy) * 0.06;
+          var baseX = farPos.x + (restPos.x - farPos.x) * introE;
+          var baseY = farPos.y + (restPos.y - farPos.y) * introE;
+          var baseZ = farPos.z + (restPos.z - farPos.z) * introE;
+          camera.position.x = baseX + cx * 6 * introE;
+          camera.position.y = baseY - cy * 4 * introE;
+          camera.position.z = baseZ;
+          camera.lookAt(0, 1.6, 0);
+
+          renderer.render(scene, camera);
+        }
+        frame();
+
+        var resizeTimer = null;
+        window.addEventListener("resize", function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function () {
+            var w = stage.clientWidth,
+              h = stage.clientHeight;
+            if (w < 10 || h < 10) return; // fiabilité : évite les divisions par ~0 sur onglets réduits
+            renderer.setSize(w, h, false);
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+          }, 120);
+        });
+
+        window.addEventListener("beforeunload", function () {
+          if (rafId) cancelAnimationFrame(rafId);
+        });
+      })();
+    </script>
+  </body>
+</html>
